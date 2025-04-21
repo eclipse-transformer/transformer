@@ -971,6 +971,11 @@ public class Transformer {
 			return false;
 		}
 
+		if (useInputName.isEmpty()) {
+			getLogger().error(consoleMarker, "Input path is empty");
+			return false;
+		}
+
 		inputName = options.normalize(useInputName);
 		inputFile = new File(inputName);
 		inputPath = inputFile.getAbsolutePath();
@@ -1002,6 +1007,10 @@ public class Transformer {
 
 	public boolean setOutput() {
 		String useOutputName = options.getOutputFileName();
+		if (useOutputName != null && useOutputName.isEmpty()) {
+			getLogger().error(consoleMarker, "Output path is empty");
+			return false;
+		}
 
 		boolean isExplicit = (useOutputName != null);
 
