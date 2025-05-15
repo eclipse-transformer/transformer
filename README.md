@@ -163,7 +163,7 @@ Immediate options may be used with or without specifying a corresponding propert
 
 The Eclipse Transformer artifacts are released to Maven Central.
 
-Snapshot artifacts are released to the Central Portal snapshot repository: [https://central.sonatype.com/repository/maven-snapshots/](https://central.sonatype.com/repository/maven-snapshots/org/eclipse/transformer/).
+Snapshot artifacts are released to the Central Portal snapshot repository: [https://central.sonatype.com/repository/maven-snapshots/](https://central.sonatype.com/service/rest/repository/browse/maven-snapshots/org/eclipse/transformer/).
 
 To use the snapshot artifacts in your Maven build, you can configure the Central Portal snapshot repository.
 
