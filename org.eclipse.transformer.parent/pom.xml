@@ -222,9 +222,9 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 					</executions>
 				</plugin>
 				<plugin>
-					<groupId>org.sonatype.plugins</groupId>
-					<artifactId>nexus-staging-maven-plugin</artifactId>
-					<version>1.7.0</version>
+					<groupId>org.sonatype.central</groupId>
+					<artifactId>central-publishing-maven-plugin</artifactId>
+					<version>0.7.0</version>
 					<extensions>true</extensions>
 				</plugin>
 				<plugin>
@@ -616,7 +616,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 			</properties>
 		</profile>
 		<profile>
-			<id>ossrh</id>
+			<id>central</id>
 			<properties>
 				<skipTests>true</skipTests>
 				<maven.test.skip>true</maven.test.skip>
@@ -635,21 +635,14 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 						</configuration>
 					</plugin>
 					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
 						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<publishingServerId>central</publishingServerId>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-				</snapshotRepository>
-			</distributionManagement>
 		</profile>
 		<profile>
 			<id>bnd-snapshot</id>
