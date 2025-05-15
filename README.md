@@ -163,34 +163,40 @@ Immediate options may be used with or without specifying a corresponding propert
 
 The Eclipse Transformer artifacts are released to Maven Central.
 
-Snapshot artifacts are released to the Sonatype OSS repository: [https://oss.sonatype.org/content/repositories/snapshots/](https://oss.sonatype.org/content/repositories/snapshots/org/eclipse/transformer/).
+Snapshot artifacts are released to the Central Portal snapshot repository: [https://central.sonatype.com/repository/maven-snapshots/](https://central.sonatype.com/repository/maven-snapshots/org/eclipse/transformer/).
 
-To use the snapshot artifacts in your Maven build, you can configure the Sonatype OSS snapshot repository.
+To use the snapshot artifacts in your Maven build, you can configure the Central Portal snapshot repository.
 
 ```xml
 <repositories>
     <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        <layout>default</layout>
+        <name>Central Portal Snapshots</name>
+        <id>central-portal-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         <releases>
             <enabled>false</enabled>
         </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </repository>
 </repositories>
 ```
 
-To use the snapshot transformer maven plugin in your Maven build, you can configure the Sonatype OSS snapshot repository.
+To use the snapshot transformer maven plugin in your Maven build, you can configure the Central Portal snapshot repository.
 
 ```xml
 <pluginRepositories>
     <pluginRepository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        <layout>default</layout>
+        <name>Central Portal Snapshots</name>
+        <id>central-portal-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         <releases>
             <enabled>false</enabled>
         </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </pluginRepository>
 </pluginRepositories>
 ```
