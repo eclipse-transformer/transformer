@@ -30,7 +30,7 @@
 		<bnd.version>7.1.0</bnd.version>
 		<junit-jupiter.version>5.12.2</junit-jupiter.version>
 		<assertj.version>3.27.3</assertj.version>
-		<xmlunit.version>2.10.0</xmlunit.version>
+		<xmlunit.version>2.10.1</xmlunit.version>
 		<bytebuddy.version>1.17.5</bytebuddy.version>
 		<maven.target.version>3.8.1</maven.target.version>
 		<shrinkwrap.version>1.2.6</shrinkwrap.version>
