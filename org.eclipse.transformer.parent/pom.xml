@@ -28,7 +28,7 @@
 		<java.release>17</java.release>
 		<maven.compiler.release>${java.release}</maven.compiler.release>
 		<bnd.version>7.1.0</bnd.version>
-		<junit-jupiter.version>5.12.2</junit-jupiter.version>
+		<junit-jupiter.version>5.13.0</junit-jupiter.version>
 		<assertj.version>3.27.3</assertj.version>
 		<xmlunit.version>2.10.2</xmlunit.version>
 		<bytebuddy.version>1.17.5</bytebuddy.version>
