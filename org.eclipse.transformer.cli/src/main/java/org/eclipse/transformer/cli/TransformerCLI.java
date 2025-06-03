@@ -370,6 +370,11 @@ public class TransformerCLI implements TransformOptions {
 			return logResult(ResultCode.ARGS_ERROR_RC);
 		}
 
+		if (getParsedArgs().getArgs().length >= 3) {
+			getLogger().error(consoleMarker, "Number of arguments must be less than 3");
+			return logResult(ResultCode.ARGS_ERROR_RC);
+		}
+
 		// TODO: Are the USAGE and HELP return codes correct?
 		//
 		// See issue #298
