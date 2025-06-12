@@ -97,5 +97,5 @@ jobs:
         ./.github/scripts/publish.sh -Pcentral
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        CENTRAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        CENTRAL_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        CENTRAL_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+        CENTRAL_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
