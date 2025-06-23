@@ -218,6 +218,9 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 							<goals>
 								<goal>sign</goal>
 							</goals>
+							<configuration>
+								<bestPractices>true</bestPractices>
+							</configuration>
 						</execution>
 					</executions>
 				</plugin>
@@ -607,7 +610,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 			<id>pinentrymode-loopback</id>
 			<activation>
 				<property>
-					<name>env.GPG_PASSPHRASE</name>
+					<name>env.MAVEN_GPG_PASSPHRASE</name>
 				</property>
 			</activation>
 			<properties>

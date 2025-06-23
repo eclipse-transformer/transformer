@@ -90,12 +90,12 @@ jobs:
         server-username: CENTRAL_USERNAME
         server-password: CENTRAL_PASSWORD
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-        gpg-passphrase: GPG_PASSPHRASE
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE
     - name: Publish
       if: ${{ matrix.canonical }}
       run: |
         ./.github/scripts/publish.sh -Pcentral
       env:
-        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         CENTRAL_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
         CENTRAL_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
