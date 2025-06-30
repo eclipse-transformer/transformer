@@ -233,7 +233,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-invoker-plugin</artifactId>
-					<version>3.9.0</version>
+					<version>3.9.1</version>
 					<configuration>
 						<projectsDirectory>${basedir}/src/it</projectsDirectory>
 						<settingsFile>${basedir}/src/it/settings.xml</settingsFile>
