@@ -966,13 +966,8 @@ public class Transformer {
 
 	public boolean setInput() {
 		String useInputName = options.getInputFileName();
-		if (useInputName == null) {
+		if (useInputName == null || useInputName.isEmpty()) {
 			getLogger().error(consoleMarker, "No input file was specified");
-			return false;
-		}
-
-		if (useInputName.isEmpty()) {
-			getLogger().error(consoleMarker, "Input path is empty");
 			return false;
 		}
 
