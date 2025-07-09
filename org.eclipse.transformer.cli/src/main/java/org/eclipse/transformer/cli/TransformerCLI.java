@@ -370,11 +370,6 @@ public class TransformerCLI implements TransformOptions {
 			return logResult(ResultCode.ARGS_ERROR_RC);
 		}
 
-		if (getParsedArgs().getArgs().length > 2) {
-			getLogger().error(consoleMarker, "Maximum number of arguments is 2");
-			return logResult(ResultCode.ARGS_ERROR_RC);
-		}
-
 		// TODO: Are the USAGE and HELP return codes correct?
 		//
 		// See issue #298
@@ -385,6 +380,11 @@ public class TransformerCLI implements TransformOptions {
 		} else if (hasOption(AppOption.HELP)) {
 			help(getSystemOut());
 			return logResult(ResultCode.SUCCESS_RC);
+		}
+
+		if (getParsedArgs().getArgs().length > 2) {
+			getLogger().error(consoleMarker, "Maximum number of arguments is 2");
+			return logResult(ResultCode.ARGS_ERROR_RC);
 		}
 
 		try {
