@@ -1002,16 +1002,15 @@ public class Transformer {
 
 	public boolean setOutput() {
 		String useOutputName = options.getOutputFileName();
-		if (useOutputName != null && useOutputName.isEmpty()) {
-			getLogger().error(consoleMarker, "Output path is empty");
-			return false;
-		}
 
 		boolean isExplicit = (useOutputName != null);
 
 		if (isExplicit) {
+			if (useOutputName.isEmpty()) {
+				getLogger().error(consoleMarker, "Output path is empty");
+				return false;
+			}
 			useOutputName = options.normalize(useOutputName);
-
 		} else {
 			File parent = inputFile.getParentFile();
 			File output = new File(parent, OUTPUT_PREFIX + inputFile.getName());
