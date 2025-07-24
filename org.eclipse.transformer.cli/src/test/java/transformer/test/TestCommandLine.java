@@ -27,6 +27,7 @@ import java.util.zip.ZipFile;
 import aQute.lib.io.IO;
 import org.assertj.core.api.SoftAssertions;
 import org.eclipse.transformer.Transformer;
+import org.eclipse.transformer.Transformer.ResultCode;
 import org.eclipse.transformer.action.Changes;
 import org.eclipse.transformer.action.ContainerChanges;
 import org.eclipse.transformer.action.ElementAction;
@@ -338,6 +339,74 @@ class TestCommandLine {
 				.doesNotContain("Test log other marker");
 		});
 
+	}
+
+	@Test
+	void testEmptyInputRejected() throws Exception {
+		String inputFileName = "";
+		String outputFileName = DYNAMIC_CONTENT_DIR + '/' + "foo";
+
+		String[] args = new String[] {
+			inputFileName, outputFileName, "-o"
+		};
+		TransformerCLI cli = new JakartaTransformerCLI(System.out, System.err, args);
+
+		Transformer transformer = new Transformer(cli.getLogger(), cli);
+		assertThat(transformer.setInput()).as("options.setInput() accepted empty string").isFalse();
+	}
+
+	@Test
+	void testEmptyOutputRejected() throws Exception {
+		String inputFileName = STATIC_CONTENT_DIR + "/command-line/A.java";
+		String outputFileName = "";
+		String[] args = new String[] {
+			inputFileName, outputFileName, "-o"
+		};
+		TransformerCLI cli = new JakartaTransformerCLI(System.out, System.err, args);
+
+		Transformer transformer = new Transformer(cli.getLogger(), cli);
+
+		assertThat(transformer.setOutput()).as("options.setOutput() accepted empty string").isFalse();
+	}
+
+	@Test
+	void testNumberOfArgs() throws Exception {
+		// Three arguments should be rejected.
+		String inputFileName = STATIC_CONTENT_DIR + "/command-line/A.java";
+		String outputFileName = DYNAMIC_CONTENT_DIR + '/' + "B.java";
+
+		String[] args = new String[] {
+			inputFileName, outputFileName, outputFileName
+		};
+		TransformerCLI cli = new JakartaTransformerCLI(System.out, System.err, args);
+
+		Transformer transformer = new Transformer(cli.getLogger(), cli);
+		ResultCode ret = cli.run();
+		assertThat(ret).as("Length of arguments is not checked").isEqualTo(ResultCode.ARGS_ERROR_RC);
+
+		// Three arguments and options should be rejected.
+		inputFileName = STATIC_CONTENT_DIR + "/command-line/A.java";
+		outputFileName = DYNAMIC_CONTENT_DIR + '/' + "C.java";
+
+		args = new String[] {
+			inputFileName, "-w", outputFileName, "-t", "java", outputFileName
+		};
+		cli = new JakartaTransformerCLI(System.out, System.err, args);
+		transformer = new Transformer(cli.getLogger(), cli);
+		ret = cli.run();
+		assertThat(ret).as("Length of arguments is not checked").isEqualTo(ResultCode.ARGS_ERROR_RC);
+
+		// Two arguments and options should be accepted.
+		inputFileName = STATIC_CONTENT_DIR + "/command-line/A.java";
+		outputFileName = DYNAMIC_CONTENT_DIR + '/' + "C.java";
+
+		args = new String[] {
+			inputFileName, "-w", outputFileName, "-t", "java", "-o"
+		};
+		cli = new JakartaTransformerCLI(System.out, System.err, args);
+		transformer = new Transformer(cli.getLogger(), cli);
+		ret = cli.run();
+		assertThat(ret).as("Transform failed").isEqualTo(ResultCode.SUCCESS_RC);
 	}
 
 	private void verifyAction(String actionClassName, String inputFileName, String outputFileName, String expectedOutputFileName,

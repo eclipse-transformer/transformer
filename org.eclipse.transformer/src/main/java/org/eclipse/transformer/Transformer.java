@@ -966,7 +966,7 @@ public class Transformer {
 
 	public boolean setInput() {
 		String useInputName = options.getInputFileName();
-		if (useInputName == null) {
+		if (useInputName == null || useInputName.isEmpty()) {
 			getLogger().error(consoleMarker, "No input file was specified");
 			return false;
 		}
@@ -1006,8 +1006,11 @@ public class Transformer {
 		boolean isExplicit = (useOutputName != null);
 
 		if (isExplicit) {
+			if (useOutputName.isEmpty()) {
+				getLogger().error(consoleMarker, "Output path is empty");
+				return false;
+			}
 			useOutputName = options.normalize(useOutputName);
-
 		} else {
 			File parent = inputFile.getParentFile();
 			File output = new File(parent, OUTPUT_PREFIX + inputFile.getName());
