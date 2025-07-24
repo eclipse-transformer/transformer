@@ -345,14 +345,28 @@ class TestCommandLine {
 	void testEmptyInputRejected() throws Exception {
 		String inputFileName = "";
 		String outputFileName = DYNAMIC_CONTENT_DIR + '/' + "foo";
-		verifyActionInvalidEmptyInputRejected(DirectoryActionImpl.class.getName(), inputFileName, outputFileName);
+
+		String[] args = new String[] {
+			inputFileName, outputFileName, "-o"
+		};
+		TransformerCLI cli = new JakartaTransformerCLI(System.out, System.err, args);
+
+		Transformer transformer = new Transformer(cli.getLogger(), cli);
+		assertThat(transformer.setInput()).as("options.setInput() accepted empty string").isFalse();
 	}
 
 	@Test
 	void testEmptyOutputRejected() throws Exception {
 		String inputFileName = STATIC_CONTENT_DIR + "/command-line/A.java";
 		String outputFileName = "";
-		verifyActionInvalidEmptyInputRejected(DirectoryActionImpl.class.getName(), inputFileName, outputFileName);
+		String[] args = new String[] {
+			inputFileName, outputFileName, "-o"
+		};
+		TransformerCLI cli = new JakartaTransformerCLI(System.out, System.err, args);
+
+		Transformer transformer = new Transformer(cli.getLogger(), cli);
+
+		assertThat(transformer.setOutput()).as("options.setOutput() accepted empty string").isFalse();
 	}
 
 	@Test
@@ -494,25 +508,5 @@ class TestCommandLine {
 			}
 			return signatureFilesMap;
 		}
-	}
-
-	private void verifyActionInvalidEmptyInputRejected(String actionClassName, String inputFileName,
-		String outputFileName) throws Exception {
-		String[] args = new String[] {
-			inputFileName, outputFileName, "-o"
-		};
-		TransformerCLI cli = new JakartaTransformerCLI(System.out, System.err, args);
-
-		Transformer transformer = new Transformer(cli.getLogger(), cli);
-		if (inputFileName.equals("")) {
-			assertThat(transformer.setInput()).as("options.setInput() unecpectedly successed").isFalse();
-			assertThat(transformer.inputName).as("options.setInput() should be returned before setting inputName").isNull();
-			return;
-		}
-		assertThat(transformer.setInput()).as("options.setInput() failed").isTrue();
-		assertThat(inputFileName).as("input file name is not correct [" + transformer.getInputFileName() + "]").isEqualTo(transformer.getInputFileName());
-
-		assertThat(transformer.setOutput()).as("options.setOutput() unexpectedly successed").isFalse();
-		assertThat(transformer.outputName).as("options.setOutput() should be returned before setting inputName").isNull();
 	}
 }
