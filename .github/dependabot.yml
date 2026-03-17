@@ -8,9 +8,13 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
 
   # Maintain dependencies for maven
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
