@@ -1,0 +1,72 @@
+#*******************************************************************************
+# Copyright (c) Contributors to the Eclipse Foundation
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License 2.0 which is available at
+# http://www.eclipse.org/legal/epl-2.0, or the Apache License, Version 2.0
+# which is available at https://www.apache.org/licenses/LICENSE-2.0.
+#
+# SPDX-License-Identifier: (EPL-2.0 OR Apache-2.0)
+#*******************************************************************************
+
+name: Lint GitHub Actions workflows
+on:
+    push:
+        branches:
+            - "main"
+        paths:
+            - '.github/workflows/*.ya?ml'
+            - '.github/zizmor.ya?ml'
+            - '.poutine.ya?ml'
+    pull_request:
+        branches:
+            - "main"
+        paths:
+            - '.github/workflows/*.ya?ml'
+            - '.github/zizmor.ya?ml'
+            - '.poutine.ya?ml'
+
+env:
+    LC_ALL: en_US.UTF-8
+
+defaults:
+    run:
+        shell: bash
+
+permissions:
+    contents: read
+
+jobs:
+    actionlint:
+        permissions:
+            security-events: write # Required for upload-sarif to upload SARIF files.
+        runs-on: ubuntu-latest
+        steps:
+            -   name: "Harden Runner"
+                uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+                with:
+                    egress-policy: block
+                    allowed-endpoints: >
+                        api.github.com:443
+                        ghcr.io:443
+                        github.com:443
+                        pkg-containers.githubusercontent.com:443
+
+            -   name: "Checkout"
+                uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+                with:
+                    persist-credentials: false
+
+            -   name: "Check workflow files with zizmor"
+                uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
+
+            -   name: "Check workflow files with poutine"
+                uses: boostsecurityio/poutine-action@84c0a0d32e8d57ae12651222be1eb15351429228 # v0.15.2
+                with:
+                    output: ${{ runner.temp }}/poutine.sarif
+
+            -   name: "Upload poutine SARIF file"
+                uses: github/codeql-action/upload-sarif@38697555549f1db7851b81482ff19f1fa5c4fedc # v4.34.1
+                with:
+                    sarif_file: ${{ runner.temp }}/poutine.sarif
+                    category: poutine
