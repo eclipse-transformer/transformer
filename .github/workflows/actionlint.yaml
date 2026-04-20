@@ -58,7 +58,7 @@ jobs:
                     persist-credentials: false
 
             -   name: "Check workflow files with zizmor"
-                uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
+                uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
 
             -   name: "Check workflow files with poutine"
                 uses: boostsecurityio/poutine-action@84c0a0d32e8d57ae12651222be1eb15351429228 # v0.15.2
