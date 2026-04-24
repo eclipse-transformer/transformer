@@ -61,7 +61,7 @@ jobs:
                 uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
 
             -   name: "Check workflow files with poutine"
-                uses: boostsecurityio/poutine-action@2bf7189397972f9eeb71ada7bd1f45b543f9e304 # v1.1.3
+                uses: boostsecurityio/poutine-action@e240ebd3eff8b2db5a8e5f6b28f58739d7db2247 # v1.1.4
                 with:
                     output: ${{ runner.temp }}/poutine.sarif
 
