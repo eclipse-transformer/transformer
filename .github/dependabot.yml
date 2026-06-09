@@ -5,16 +5,32 @@ updates:
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directories:
+    - "/"
     schedule:
       interval: "daily"
     cooldown:
       default-days: 7
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    labels:
+      - "dependencies"
+      - "github_actions"
 
   # Maintain dependencies for maven
   - package-ecosystem: "maven"
-    directory: "/"
+    directories:
+    - "/"
     schedule:
       interval: "daily"
     cooldown:
       default-days: 7
+    groups:
+      java-dependencies:
+        patterns:
+          - "*"
+    labels:
+      - "dependencies"
+      - "java"
