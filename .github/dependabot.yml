@@ -2,35 +2,72 @@
 
 version: 2
 updates:
+    # Maintain dependencies for GitHub Actions
+    - package-ecosystem: "github-actions"
+      directories:
+          - "/"
+      schedule:
+          interval: "daily"
+      cooldown:
+          default-days: 7
+      groups:
+          github-actions:
+              patterns:
+                  - "*"
+      labels:
+          - "dependencies"
+          - "github_actions"
 
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directories:
-    - "/"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-    groups:
-      github-actions:
-        patterns:
-          - "*"
-    labels:
-      - "dependencies"
-      - "github_actions"
-
-  # Maintain dependencies for maven
-  - package-ecosystem: "maven"
-    directories:
-    - "/"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-    groups:
-      java-dependencies:
-        patterns:
-          - "*"
-    labels:
-      - "dependencies"
-      - "java"
+    # Maintain dependencies for maven
+    - package-ecosystem: "maven"
+      directories:
+          - "/"
+      schedule:
+          interval: "daily"
+      cooldown:
+          default-days: 7
+      groups:
+          java-dependencies:
+              patterns:
+                  - "*"
+              exclude-patterns:
+                  - "org.slf4j*"
+                  - "biz.aQute.bnd*"
+                  - "jakarta*"
+                  - "org.apache.maven*"
+          slf4j-dependencies:
+              patterns:
+                  - "org.slf4j*"
+          bnd-dependencies:
+              patterns:
+                  - "biz.aQute.bnd*"
+          jakarta-dependencies:
+              patterns:
+                  - "jakarta*"
+          maven-dependencies:
+              patterns:
+                  - "org.apache.maven*"
+      ignore:
+          - dependency-name: "org.slf4j*"
+            update-types:
+                - "version-update:semver-major"
+          - dependency-name: "jakarta*"
+            update-types:
+                - "version-update:semver-major"
+                - "version-update:semver-minor"
+          - dependency-name: "biz.aQute.bnd*"
+            update-types:
+                - "version-update:semver-major"
+                - "version-update:semver-minor"
+          - dependency-name: "org.apache.maven:apache-maven"
+          - dependency-name: "org.apache.maven:maven-core"
+          - dependency-name: "org.apache.maven:maven-model"
+          - dependency-name: "org.apache.maven:maven-artifact"
+          - dependency-name: "org.apache.maven:maven-plugin-api"
+          - dependency-name: "org.apache.maven:maven-compat"
+            update-types:
+                - "version-update:semver-major"
+                - "version-update:semver-minor"
+      labels:
+          - "dependencies"
+          - "java"
