@@ -2,3 +2,6 @@ rules:
     secrets-outside-env:
         ignore:
             - cibuild.yaml
+    dangerous-triggers:
+        ignore:
+            - "dependabot_merge.yaml"
