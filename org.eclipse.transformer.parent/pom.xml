@@ -366,7 +366,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-plugin-plugin</artifactId>
-					<version>3.15.2</version>
+					<version>3.16.0</version>
 					<executions>
 						<execution>
 							<id>default-helpmojo</id>
@@ -529,7 +529,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 			<dependency>
 				<groupId>org.apache.maven.plugin-tools</groupId>
 				<artifactId>maven-plugin-annotations</artifactId>
-				<version>3.15.2</version>
+				<version>3.16.0</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
