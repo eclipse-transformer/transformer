@@ -33,7 +33,7 @@
 		<xmlunit.version>2.14.0</xmlunit.version>
 		<bytebuddy.version>1.18.14</bytebuddy.version>
 		<maven.target.version>3.8.1</maven.target.version>
-		<shrinkwrap.version>1.2.6</shrinkwrap.version>
+		<shrinkwrap.version>2.0.0.Final</shrinkwrap.version>
 		<!-- Reproducible build -->
 		<project.build.outputTimestamp>1980-02-01T00:00:00Z</project.build.outputTimestamp>
 	</properties>
