@@ -14,11 +14,16 @@ package transformer.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
+import java.lang.reflect.AnnotatedParameterizedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.RecordComponent;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -50,6 +55,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import transformer.test.data.Sample_Record;
 
 public class ClassActionTest {
 	Logger	logger;
@@ -236,6 +242,73 @@ public class ClassActionTest {
 			.map(m -> m.classes)
 			.get(InstanceOfAssertFactories.array(String[].class))
 			.containsExactlyInAnyOrder("transformed/member/NestMember1", "pkg/member/NestMember2");
+	}
+
+	@Test
+	public void record_transform() throws Exception {
+		String resourceName = Sample_Record.class.getName().replace('.', '/') + ".class";
+		ByteData inputData;
+		try (var input = Sample_Record.class.getClassLoader().getResourceAsStream(resourceName)) {
+			assertThat(input).isNotNull();
+			inputData = new ByteDataImpl(resourceName, ByteBuffer.wrap(input.readAllBytes()), FileUtils.DEFAULT_CHARSET);
+		}
+		ActionContext context = new ActionContext(logger,
+			new SelectionRuleImpl(logger, Collections.emptyMap(), Collections.emptyMap()),
+			new SignatureRuleImpl(logger, Map.of("javax.inject", "jakarta.inject"), null, null, null, null, null,
+				Collections.emptyMap()));
+		ByteData outputData = new ClassActionImpl(context).apply(inputData);
+		Class<?> transformed = new ClassLoader(Sample_Record.class.getClassLoader()) {
+			Class<?> defineRecord() {
+				return defineClass(null, outputData.buffer(), null);
+			}
+		}.defineRecord();
+
+		assertThat(transformed.isRecord()).isTrue();
+		RecordComponent[] components = transformed.getRecordComponents();
+		assertThat(components).extracting(RecordComponent::getName)
+			.containsExactly("provider", "providers", "array", "unchanged", "count");
+		assertThat(components).extracting(RecordComponent::getType)
+			.containsExactly(jakarta.inject.Provider.class, List.class, jakarta.inject.Provider[].class, String.class,
+				int.class);
+		for (RecordComponent component : components) {
+			assertThat(component.getAccessor().getReturnType()).isEqualTo(component.getType());
+			assertThat(component.getAccessor().getGenericReturnType()).isEqualTo(component.getGenericType());
+		}
+
+		ParameterizedType providerType = (ParameterizedType) components[0].getGenericType();
+		assertThat(providerType.getRawType()).isEqualTo(jakarta.inject.Provider.class);
+		assertThat(providerType.getActualTypeArguments()).containsExactly(String.class);
+		ParameterizedType providersType = (ParameterizedType) components[1].getGenericType();
+		assertThat(providersType.getActualTypeArguments()).containsExactly(providerType);
+		AnnotatedParameterizedType annotatedProviders = (AnnotatedParameterizedType) components[1].getAnnotatedType();
+		assertThat(annotatedProviders.getAnnotatedActualTypeArguments()[0].getAnnotation(Sample_Record.Type.class).value())
+			.isEqualTo(jakarta.inject.Provider.class);
+		assertThat(components[3].getAnnotation(Sample_Record.Component.class).value())
+			.isEqualTo(jakarta.inject.Provider.class);
+
+		jakarta.inject.Provider<String> provider = () -> "value";
+		Object record = transformed.getConstructor(jakarta.inject.Provider.class, List.class,
+			jakarta.inject.Provider[].class, String.class, int.class)
+			.newInstance(provider, List.of(provider), new jakarta.inject.Provider<?>[] {provider}, "unchanged", 42);
+		assertThat(components[0].getAccessor().invoke(record)).isSameAs(provider);
+		assertThat(components[3].getAccessor().invoke(record)).isEqualTo("unchanged");
+		assertThat(components[4].getAccessor().invoke(record)).isEqualTo(42);
+	}
+
+	@Test
+	public void record_unchanged() throws Exception {
+		String resourceName = Sample_Record.class.getName().replace('.', '/') + ".class";
+		ByteData inputData;
+		try (var input = Sample_Record.class.getClassLoader().getResourceAsStream(resourceName)) {
+			assertThat(input).isNotNull();
+			inputData = new ByteDataImpl(resourceName, ByteBuffer.wrap(input.readAllBytes()), FileUtils.DEFAULT_CHARSET);
+		}
+		ActionContext context = new ActionContext(logger,
+			new SelectionRuleImpl(logger, Collections.emptyMap(), Collections.emptyMap()),
+			new SignatureRuleImpl(logger, Collections.emptyMap(), null, null, null, null, null, Collections.emptyMap()));
+		ByteData outputData = new ClassActionImpl(context).apply(inputData);
+		assertThat(outputData.name()).isEqualTo(inputData.name());
+		assertThat(outputData.buffer()).isEqualTo(inputData.buffer());
 	}
 
 	@Test

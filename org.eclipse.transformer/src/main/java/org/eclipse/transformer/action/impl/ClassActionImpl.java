@@ -58,6 +58,8 @@ import aQute.bnd.classfile.NestHostAttribute;
 import aQute.bnd.classfile.NestMembersAttribute;
 import aQute.bnd.classfile.ParameterAnnotationInfo;
 import aQute.bnd.classfile.ParameterAnnotationsAttribute;
+import aQute.bnd.classfile.RecordAttribute;
+import aQute.bnd.classfile.RecordAttribute.RecordComponent;
 import aQute.bnd.classfile.RuntimeInvisibleAnnotationsAttribute;
 import aQute.bnd.classfile.RuntimeInvisibleParameterAnnotationsAttribute;
 import aQute.bnd.classfile.RuntimeInvisibleTypeAnnotationsAttribute;
@@ -1020,6 +1022,28 @@ public class ClassActionImpl extends ElementActionImpl {
 				}
 
 				return (outputClasses == null) ? null : new NestMembersAttribute(outputClasses);
+			}
+
+			case RecordAttribute.NAME : {
+				RecordAttribute inputAttribute = (RecordAttribute) attr;
+				RecordComponent[] inputComponents = inputAttribute.components;
+				RecordComponent[] outputComponents = null;
+
+				for (int i = 0; i < inputComponents.length; i++) {
+					RecordComponent inputComponent = inputComponents[i];
+					String outputDescriptor = transformDescriptor(inputComponent.descriptor);
+					Attribute[] outputAttributes = transform(inputComponent.attributes, SignatureType.FIELD, inputName);
+					if ((outputDescriptor != null) || (outputAttributes != null)) {
+						if (outputComponents == null) {
+							outputComponents = inputComponents.clone();
+						}
+						outputComponents[i] = new RecordComponent(inputComponent.name,
+							(outputDescriptor == null) ? inputComponent.descriptor : outputDescriptor,
+							(outputAttributes == null) ? inputComponent.attributes : outputAttributes);
+					}
+				}
+
+				return (outputComponents == null) ? null : new RecordAttribute(outputComponents);
 			}
 
 			case ConstantValueAttribute.NAME : {
