@@ -31,7 +31,7 @@
 		<junit-jupiter.version>6.1.3</junit-jupiter.version>
 		<assertj.version>3.27.7</assertj.version>
 		<xmlunit.version>2.14.0</xmlunit.version>
-		<bytebuddy.version>1.18.14</bytebuddy.version>
+		<bytebuddy.version>1.18.15</bytebuddy.version>
 		<maven.target.version>3.8.1</maven.target.version>
 		<shrinkwrap.version>2.0.0.Final</shrinkwrap.version>
 		<!-- Reproducible build -->
@@ -227,7 +227,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 				<plugin>
 					<groupId>org.sonatype.central</groupId>
 					<artifactId>central-publishing-maven-plugin</artifactId>
-					<version>0.11.0</version>
+					<version>0.12.0</version>
 					<extensions>true</extensions>
 				</plugin>
 				<plugin>
